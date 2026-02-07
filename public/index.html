@@ -21,17 +21,44 @@
             background-color: var(--bg-color);
             color: var(--text-dark);
             margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
+            padding: 0; /* 레이아웃 구성을 위해 0으로 변경 */
             min-height: 100vh;
         }
 
-        .container {
+        /* [추가] 양옆 광고를 포함한 전체 레이아웃 */
+        .main-layout {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 30px;
             width: 100%;
-            max-width: 1200px;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        /* [추가] 사이드바 광고 영역 스타일 */
+        .sidebar-ad {
+            width: 160px;
+            position: sticky;
+            top: 20px; /* 스크롤 시 상단에서 멈추는 지점 */
+            flex-shrink: 0;
+        }
+
+        .ad-box {
+            background: #eee;
+            min-height: 600px;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px dashed #ccc;
             text-align: center;
-            padding-top: 40px;
+        }
+
+        .container {
+            flex: 1;
+            max-width: 1000px;
+            text-align: center;
         }
 
         h1 { font-weight: 700; font-size: 2.5rem; margin-bottom: 30px; color: var(--text-dark); }
@@ -94,45 +121,64 @@
             padding-left: 10px;
         }
 
+        /* [반응형] 1400px 이하일 때 사이드 광고 숨김 */
+        @media (max-width: 1400px) {
+            .sidebar-ad { display: none; }
+        }
+
         @media (max-width: 900px) { h1 { font-size: 2rem; } }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>NewsBrief <span>Pro</span></h1>
+    <div class="main-layout">
+        <aside class="sidebar-ad">
+            <div class="ad-box">
+                <p style="font-size: 12px; color: #999; margin-bottom: 10px;">ADVERTISEMENT</p>
+                </div>
+        </aside>
 
-        <div class="input-section">
-            <div class="search-input-box">
-                <span style="margin-right:12px;">🔍</span>
-                <input type="text" id="urlInput" class="form-control" placeholder="요약할 뉴스 기사 URL을 입력하세요..." autocomplete="off">
-                <button type="button" class="btn-search" id="searchBtn" onclick="startSummary()">
-                    <svg viewBox="0 0 50 50"><path d="M22.13.5c11.378 0 20.632 9.256 20.632 20.63 0 4.699-1.566 9.155-4.439 12.782l10.164 10.165a2.41 2.41 0 0 1-1.706 4.115 2.412 2.412 0 0 1-1.706-.705L33.31 35.719a2.41 2.41 0 0 1 0-3.41 15.71 15.71 0 0 0 4.628-11.178c0-8.718-7.09-15.808-15.807-15.808-8.718 0-15.808 7.09-15.808 15.808 0 7.15 4.817 13.43 11.714 15.273a2.41 2.41 0 0 1 1.705 2.954 2.41 2.41 0 0 1-2.95 1.705C7.788 38.658 1.5 30.46 1.5 21.131 1.5 9.756 10.756.5 22.13.5zm4.716 34.746a3.483 3.483 0 1 1 0 6.966 3.483 3.483 0 0 1 0-6.966z"></path></svg>
-                </button>
+        <div class="container">
+            <h1>NewsBrief <span>Pro</span></h1>
+
+            <div class="input-section">
+                <div class="search-input-box">
+                    <span style="margin-right:12px;">🔍</span>
+                    <input type="text" id="urlInput" class="form-control" placeholder="요약할 뉴스 기사 URL을 입력하세요..." autocomplete="off">
+                    <button type="button" class="btn-search" id="searchBtn" onclick="startSummary()">
+                        <svg viewBox="0 0 50 50"><path d="M22.13.5c11.378 0 20.632 9.256 20.632 20.63 0 4.699-1.566 9.155-4.439 12.782l10.164 10.165a2.41 2.41 0 0 1-1.706 4.115 2.412 2.412 0 0 1-1.706-.705L33.31 35.719a2.41 2.41 0 0 1 0-3.41 15.71 15.71 0 0 0 4.628-11.178c0-8.718-7.09-15.808-15.807-15.808-8.718 0-15.808 7.09-15.808 15.808 0 7.15 4.817 13.43 11.714 15.273a2.41 2.41 0 0 1 1.705 2.954 2.41 2.41 0 0 1-2.95 1.705C7.788 38.658 1.5 30.46 1.5 21.131 1.5 9.756 10.756.5 22.13.5zm4.716 34.746a3.483 3.483 0 1 1 0 6.966 3.483 3.483 0 0 1 0-6.966z"></path></svg>
+                    </button>
+                </div>
             </div>
-        </div>
 
-        <div id="resultArea" class="results-grid">
-            <div class="card main-summary">
-                <h2>📋 결과</h2>
-                <div id="summaryMain" class="result-content"></div>
-                <div id="urlLinkArea"></div>
-                <div id="disclaimerArea"></div>
+            <div id="resultArea" class="results-grid">
+                <div class="card main-summary">
+                    <h2>📋 결과</h2>
+                    <div id="summaryMain" class="result-content"></div>
+                    <div id="urlLinkArea"></div>
+                    <div id="disclaimerArea"></div>
 
-                <hr style="margin: 30px 0; border: 0; border-top: 1px solid #f0f0f0;">
-                <div style="width: 100%; overflow-x: auto; text-align: center; -webkit-overflow-scrolling: touch;">
-                    <div style="display: inline-block; min-width: 728px; padding-bottom: 10px;">
-                        <script src="https://ads-partners.coupang.com/g.js"></script>
-                        <script>
-                            new PartnersCoupang.G({"id":963504,"template":"banner","trackingCode":"AF5069807","width":"728","height":"90"});
-                        </script>
+                    <hr style="margin: 30px 0; border: 0; border-top: 1px solid #f0f0f0;">
+                    <div style="width: 100%; overflow-x: auto; text-align: center; -webkit-overflow-scrolling: touch;">
+                        <div style="display: inline-block; min-width: 728px; padding-bottom: 10px;">
+                            <script src="https://ads-partners.coupang.com/g.js"></script>
+                            <script>
+                                new PartnersCoupang.G({"id":963504,"template":"banner","trackingCode":"AF5069807","width":"728","height":"90"});
+                            </script>
+                        </div>
+                        <p style="font-size: 11px; color: #94a3b8; margin-top: 10px; white-space: nowrap;">
+                            "이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다."
+                        </p>
                     </div>
-                    <p style="font-size: 12px; color: gray; margin-top: 10px; white-space: nowrap;">
-                        "이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다."
-                    </p>
                 </div>
             </div>
         </div>
-    </div>	    
+
+        <aside class="sidebar-ad">
+            <div class="ad-box">
+                <p style="font-size: 12px; color: #999; margin-bottom: 10px;">ADVERTISEMENT</p>
+                </div>
+        </aside>
+    </div>
 
     <script>
         async function startSummary() {
@@ -145,7 +191,6 @@
             document.getElementById('resultArea').style.display = 'none';
             btn.disabled = true;
 
-            // [추가] 초기 팝업 띄우기
             Swal.fire({
                 title: 'AI 분석 에이전트',
                 html: '<strong>기사 데이터를 수집하기 위해 준비 중입니다...</strong>',
@@ -171,7 +216,6 @@
 
                     const chunk = decoder.decode(value, { stream: true });
 
-                    // 한 chunk 안에 여러 개의 로그가 있을 수 있으므로 줄 단위로 쪼개서 처리
                     if (chunk.includes('[Debug]')) {
                         const lines = chunk.split('\n');
                         for (const line of lines) {
@@ -182,40 +226,30 @@
                                 }
                             }
                         }
-                        // 로그가 포함된 chunk가 요약 시작 신호를 포함하지 않는다면 continue
                         if (!chunk.includes("최종 정밀 요약")) continue;
                     }
 
-                    // 순수 요약 데이터만 누적 (로그 오염 방지)
                     accumulatedData += chunk;
 
                     const SEP_SUMMARY = "최종 정밀 요약 (99.9% Accuracy)";
                     if (accumulatedData.includes(SEP_SUMMARY)) {
-                        // 요약 데이터가 감지되면 팝업 닫고 결과창 노출
                         if (Swal.isVisible()) { Swal.close(); }
                         document.getElementById('resultArea').style.display = 'block'; 
                         
                         let parts = accumulatedData.split(SEP_SUMMARY);
                         if (parts.length > 1) {
                             let mainText = parts[1].split("내부 감사 로그")[0];
-
-                            // 1. 불필요한 구분선 및 앞뒤 공백 제거
                             mainText = mainText.replace(/[=]{5,}/g, '').trim();
 
-                            // 2. [핵심 수정] 제목 스타일 적용 로직 강화
-                            // 앞뒤에 공백이나 줄바꿈이 있어도 '📌 제목:'으로 시작하는 라인을 찾아 감쌉니다.
                             if (mainText.includes("📌 제목:")) {
                                 mainText = mainText.replace(/📌 제목:\s*(.*?)(\n|$)/g, '<span class="highlight-title">📌 제목: $1</span><br>');
                             }
-
-                            // 3. 문장 단위 줄바꿈 적용
                             mainText = mainText.replace(/\.[\s]+/g, ".<br>");
 
                             document.getElementById('summaryMain').innerHTML = mainText;
 
                             if (!isSummaryStarted) {
                                 isSummaryStarted = true;
-                                // 원문 링크 및 면책 조항 주입
                                 document.getElementById('urlLinkArea').innerHTML = `
                                     <div style="margin-top: 15px; padding-top: 10px; border-top: 1px dashed #E1E8ED;">
                                         <a href="${url}" target="_blank" style="color: var(--primary-color); font-weight: 700; text-decoration: none; font-size: 0.95rem;">
